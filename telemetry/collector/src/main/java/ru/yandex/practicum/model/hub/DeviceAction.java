@@ -10,11 +10,9 @@ import lombok.ToString;
 @Setter
 @ToString
 public class DeviceAction {
-    @NotBlank
     private String sensorId;
 
-    @NotNull
     private ActionType type;
 
-    private Integer value;
+    private int value;
 }

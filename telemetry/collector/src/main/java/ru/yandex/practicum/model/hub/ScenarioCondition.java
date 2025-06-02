@@ -10,15 +10,11 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ScenarioCondition {
-    @NotBlank
     private String sensorId;
 
-    @NotNull
     private ConditionType type;
 
-    @NotNull
     private ConditionOperation operation;
 
-    @NotNull
-    private Integer value;
+    private int value;
 }
