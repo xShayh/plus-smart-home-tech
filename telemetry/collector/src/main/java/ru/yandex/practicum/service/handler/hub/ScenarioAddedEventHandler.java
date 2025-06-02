@@ -48,10 +48,6 @@ public class ScenarioAddedEventHandler extends BaseHubEventHandler<ScenarioAdded
     }
 
     private DeviceActionAvro mapToActionAvro(DeviceAction deviceAction) {
-        if (deviceAction.getValue() == null) {
-            throw new IllegalArgumentException("value не может быть null");
-        }
-
         ActionTypeAvro actionTypeAvro = switch (deviceAction.getType()) {
             case INVERSE -> ActionTypeAvro.INVERSE;
             case ACTIVATE -> ActionTypeAvro.ACTIVATE;
