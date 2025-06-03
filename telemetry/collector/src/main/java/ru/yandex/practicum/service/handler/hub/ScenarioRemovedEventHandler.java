@@ -5,7 +5,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.ScenarioRemovedAvro;
 import ru.yandex.practicum.model.hub.HubEvent;
-import ru.yandex.practicum.model.hub.HubEventType;
+import ru.yandex.practicum.model.hub.type.HubEventType;
 import ru.yandex.practicum.model.hub.ScenarioRemovedEvent;
 
 @Component

@@ -5,6 +5,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.*;
 import ru.yandex.practicum.model.hub.*;
+import ru.yandex.practicum.model.hub.type.HubEventType;
 
 @Component
 public class ScenarioAddedEventHandler extends BaseHubEventHandler<ScenarioAddedAvro> {

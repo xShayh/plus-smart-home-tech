@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.DeviceRemovedAvro;
 import ru.yandex.practicum.model.hub.DeviceRemovedEvent;
 import ru.yandex.practicum.model.hub.HubEvent;
-import ru.yandex.practicum.model.hub.HubEventType;
+import ru.yandex.practicum.model.hub.type.HubEventType;
 
 @Component
 public class DeviceRemovedEventHandler extends BaseHubEventHandler<DeviceRemovedAvro> {
