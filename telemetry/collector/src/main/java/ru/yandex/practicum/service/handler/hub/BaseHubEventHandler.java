@@ -44,6 +44,7 @@ public abstract class BaseHubEventHandler<T extends SpecificRecordBase> implemen
                 hubEventAvro.getHubId(),
                 hubEventAvro);
         producer.send(record);
+        producer.flush();
 
         log.info("Отправили в Kafka {}", record);
     }

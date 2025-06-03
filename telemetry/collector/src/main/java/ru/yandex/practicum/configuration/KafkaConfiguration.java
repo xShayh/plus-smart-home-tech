@@ -10,10 +10,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.Duration;
 import java.util.Properties;
 
 @Configuration
-public class KafkaConfiguration {
+public class KafkaConfiguration implements AutoCloseable {
     @Value("${kafka.bootstrap.server}")
     private String bootstrapServer;
 
@@ -32,9 +33,11 @@ public class KafkaConfiguration {
     }
 
     @PreDestroy
-    public void closeProducer() {
+    @Override
+    public void close() {
         if (producer != null) {
-            producer.close();
+            producer.flush();
+            producer.close(Duration.ofSeconds(10));
         }
     }
 }
