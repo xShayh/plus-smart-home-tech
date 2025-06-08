@@ -29,7 +29,7 @@ protocol HubEventProtocol {
     		string sensorId;
     		ConditionTypeAvro type;
     		ConditionOperationAvro operation;
-    		int value;
+    		union { null, int } value = null;
     	}
 
 	enum ActionTypeAvro {
@@ -39,7 +39,7 @@ protocol HubEventProtocol {
 	record DeviceActionAvro {
     		string sensorId;
     		ActionTypeAvro type;
-    		int value;
+    		union { null, int } value = null;
     	}
 
 	record ScenarioAddedAvro {
