@@ -26,11 +26,11 @@ protocol HubEventProtocol {
 	}
 
 	record ScenarioConditionAvro {
-        		string sensorId;
-        		ConditionTypeAvro type;
-        		ConditionOperationAvro operation;
-        		union { null, int } value = null;
-        	}
+        string sensorId;
+        ConditionTypeAvro type;
+        ConditionOperationAvro operation;
+        union { null, int } value = null;
+    }
 
 	enum ActionTypeAvro {
 		ACTIVATE, DEACTIVATE, INVERSE, SET_VALUE
