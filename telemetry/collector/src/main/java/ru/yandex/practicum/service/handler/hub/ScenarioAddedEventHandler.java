@@ -63,11 +63,15 @@ public class ScenarioAddedEventHandler extends BaseHubEventHandler<ScenarioAdded
             default -> throw new IllegalArgumentException(
                     "Неизвестное действие: " + deviceAction.getType());
         };
-        return DeviceActionAvro.newBuilder()
+        DeviceActionAvro.Builder builder = DeviceActionAvro.newBuilder()
                 .setSensorId(deviceAction.getSensorId())
-                .setType(actionTypeAvro)
-                .setValue(deviceAction.getValue())
-                .build();
+                .setType(actionTypeAvro);
+
+        if (deviceAction.hasValue()) {
+            builder.setValue(deviceAction.getValue());
+        }
+
+        return builder.build();
     }
 
     @Override
