@@ -29,7 +29,7 @@ protocol HubEventProtocol {
         		string sensorId;
         		ConditionTypeAvro type;
         		ConditionOperationAvro operation;
-        		int value;
+        		union { null, int } value = null;
         	}
 
 	enum ActionTypeAvro {
