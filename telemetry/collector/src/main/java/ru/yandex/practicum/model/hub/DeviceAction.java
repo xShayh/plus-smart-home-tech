@@ -1,21 +1,11 @@
 package ru.yandex.practicum.model.hub;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 import ru.yandex.practicum.model.hub.type.ActionType;
 
-@Getter
-@Setter
-@ToString
+@Data
 public class DeviceAction {
-    @NotBlank
     private String sensorId;
-
-    @NotNull
     private ActionType type;
-
-    private Integer value;
+    private int value;
 }

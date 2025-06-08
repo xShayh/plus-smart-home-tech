@@ -1,7 +1,5 @@
 package ru.yandex.practicum.model.hub;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,15 +10,8 @@ import ru.yandex.practicum.model.hub.type.ConditionType;
 @Setter
 @ToString
 public class ScenarioCondition {
-    @NotBlank
     private String sensorId;
-
-    @NotNull
     private ConditionType type;
-
-    @NotNull
     private ConditionOperation operation;
-
-    @NotNull
-    private Integer value;
+    private int value;
 }
