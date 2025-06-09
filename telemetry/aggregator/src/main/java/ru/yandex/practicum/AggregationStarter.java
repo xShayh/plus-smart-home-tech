@@ -1,14 +1,15 @@
 package ru.yandex.practicum;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
+
 import org.apache.kafka.common.errors.WakeupException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.config.KafkaConsumerService;
+import ru.yandex.practicum.config.KafkaProducerService;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 
@@ -18,44 +19,54 @@ import java.util.Optional;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class AggregationStarter {
-    private final KafkaConsumer<String, SensorEventAvro> consumer;
-    private final KafkaProducer<String, SensorsSnapshotAvro> producer;
+    private final KafkaConsumerService consumerService;
+    private final KafkaProducerService producerService;
     private final SnapshotStorage snapshotStorage;
     private final String inputTopic;
     private final String outputTopic;
 
+    public AggregationStarter(
+            KafkaConsumerService consumerService,
+            KafkaProducerService producerService,
+            SnapshotStorage snapshotStorage,
+            @Value("${kafka.input-topic}") String inputTopic,
+            @Value("${kafka.output-topic}") String outputTopic) {
+        this.consumerService = consumerService;
+        this.producerService = producerService;
+        this.snapshotStorage = snapshotStorage;
+        this.inputTopic = inputTopic;
+        this.outputTopic = outputTopic;
+    }
+
     public void start() {
         try {
-            consumer.subscribe(List.of(inputTopic));
+            consumerService.subscribe(List.of(inputTopic));
             log.info("Подписка на топик {}", inputTopic);
 
             while (true) {
-                ConsumerRecords<String, SensorEventAvro> records = consumer.poll(Duration.ofMillis(1000));
-                for (ConsumerRecord<String, SensorEventAvro> record : records) {
+                ConsumerRecords<String, SpecificRecordBase> records = consumerService.poll(Duration.ofMillis(1000));
+
+                for (ConsumerRecord<String, SpecificRecordBase> record : records) {
                     try {
-                        Optional<SensorsSnapshotAvro> snapshotOpt = snapshotStorage.updateState(record.value());
+                        SensorEventAvro event = (SensorEventAvro) record.value();
+                        Optional<SensorsSnapshotAvro> snapshotOpt = snapshotStorage.updateState(event);
 
-                        if (snapshotOpt.isPresent()) {
-                            SensorsSnapshotAvro snapshot = snapshotOpt.get();
-                            ProducerRecord<String, SensorsSnapshotAvro> producerRecord =
-                                    new ProducerRecord<>(outputTopic, snapshot.getHubId(), snapshot);
+                        snapshotOpt.ifPresent(snapshot -> {
+                            try {
+                                producerService.send(outputTopic, snapshot.getHubId(), snapshot);
+                                log.info("Сообщение отправлено в Kafka: топик={}, ключ={}", outputTopic, snapshot.getHubId());
+                            } catch (Exception e) {
+                                log.error("Ошибка при отправке сообщения в Kafka", e);
+                            }
+                        });
 
-                            producer.send(producerRecord, (metadata, exception) -> {
-                                if (exception != null) {
-                                    log.error("Ошибка при отправке сообщения в Kafka: {}", exception.getMessage(), exception);
-                                } else {
-                                    log.info("Сообщение={} отправлено в Kafka: топик={}, смещение={}",
-                                            producerRecord, metadata.topic(), metadata.offset());
-                                }
-                            });
-                        }
                     } catch (Exception e) {
                         log.error("Ошибка при обработке записи: ключ={}, значение={}", record.key(), record.value(), e);
                     }
                 }
-                consumer.commitSync();
+
+                consumerService.commitSync();
             }
         } catch (WakeupException ignored) {
             log.error("Получен WakeupException");
@@ -63,16 +74,17 @@ public class AggregationStarter {
             log.error("Ошибка во время обработки событий от датчиков", e);
         } finally {
             try {
-                producer.flush();
+                producerService.flush();
                 log.info("Все данные отправлены в Kafka");
-                consumer.commitSync();
+                consumerService.commitSync();
                 log.info("Смещения зафиксированы");
             } finally {
                 log.info("Закрытие консьюмера");
-                consumer.close();
-                log.info("Закрываем продюсера");
-                producer.close();
+                consumerService.close();
+                log.info("Закрытие продюсера");
+                producerService.close();
             }
         }
     }
 }
+
