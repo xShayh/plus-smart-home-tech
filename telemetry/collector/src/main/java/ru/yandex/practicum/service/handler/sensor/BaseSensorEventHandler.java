@@ -49,6 +49,7 @@ public abstract class BaseSensorEventHandler<T extends SpecificRecordBase> imple
                 sensorEventAvro.getHubId(),
                 sensorEventAvro);
         producer.send(record);
+        producer.flush();
 
         log.info("Отправили в Kafka: {}", record);
     }

@@ -30,6 +30,12 @@ public class ScenarioAddedEventHandler extends BaseHubEventHandler<ScenarioAdded
     }
 
     private ScenarioConditionAvro mapToConditionAvro(ScenarioConditionProto scenarioCondition) {
+        Object value = null;
+        if (scenarioCondition.getValueCase() == ScenarioConditionProto.ValueCase.INT_VALUE) {
+            value = scenarioCondition.getIntValue();
+        } else if (scenarioCondition.getValueCase() == ScenarioConditionProto.ValueCase.BOOL_VALUE) {
+            value = scenarioCondition.getBoolValue();
+        }
         ConditionTypeAvro conditionTypeAvro = switch (scenarioCondition.getType()) {
             case MOTION -> ConditionTypeAvro.MOTION;
             case LUMINOSITY -> ConditionTypeAvro.LUMINOSITY;
@@ -51,6 +57,7 @@ public class ScenarioAddedEventHandler extends BaseHubEventHandler<ScenarioAdded
                 .setSensorId(scenarioCondition.getSensorId())
                 .setType(conditionTypeAvro)
                 .setOperation(conditionOperationAvro)
+                .setValue(value)
                 .build();
     }
 
