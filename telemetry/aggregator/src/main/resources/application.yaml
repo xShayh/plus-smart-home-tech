@@ -3,3 +3,4 @@ kafka:
   input-topic: telemetry.sensors.v1
   output-topic: telemetry.snapshots.v1
   group-id: telemetry.aggregator
+  auto-commit: false
