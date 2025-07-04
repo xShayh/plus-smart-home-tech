@@ -1,6 +1,11 @@
-kafka:
-  bootstrap-servers: localhost:9092
-  input-topic: telemetry.sensors.v1
-  output-topic: telemetry.snapshots.v1
-  group-id: telemetry.aggregator
-  auto-commit: false
+spring:
+  application:
+    name: aggregator
+  config:
+    import: configserver:http://localhost:8889
+  cloud:
+    config:
+      fail-fast: true
+      retry:
+        useRandomPolicy: true
+        max-interval: 6000
