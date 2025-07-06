@@ -14,7 +14,7 @@ grpc:
     port: 0
 
 server:
-  port: 0
+  port: 59091
 
 sensor:
   motionSensors:
