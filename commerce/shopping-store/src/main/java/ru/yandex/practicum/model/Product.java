@@ -17,13 +17,14 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Table(schema = "store", name = "products")
+@Table(name = "products")
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = "description")
 @Getter
 @Setter
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "name", nullable = false)

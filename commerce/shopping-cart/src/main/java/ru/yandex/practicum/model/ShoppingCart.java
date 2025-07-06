@@ -12,13 +12,14 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(schema = "cart", name = "shopping_carts")
+@Table(name = "cart")
 @EqualsAndHashCode(of = "id")
 @Getter
 @Setter
 @ToString(exclude = "products")
 public class ShoppingCart {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "username", nullable = false, unique = true)
