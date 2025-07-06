@@ -8,11 +8,11 @@ kafka:
     hubs: telemetry.analyzer.hub
 
 server:
-  port: 59091
+  port: 0
 
 grpc:
   client:
-    hub-router:
+    data-generator:
       address: 'discovery:///data-generator'
       enableKeepAlive: true
       keepAliveWithoutCalls: true
@@ -24,9 +24,6 @@ spring:
     url: "jdbc:postgresql://localhost:5433/smarthome"
     username: "postgres"
     password: "postgres"
-  sql:
-    init:
-      data-locations: classpath:data.sql
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
