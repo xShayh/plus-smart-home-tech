@@ -24,9 +24,6 @@ spring:
     url: "jdbc:postgresql://localhost:5433/smarthome"
     username: "postgres"
     password: "postgres"
-  sql:
-    init:
-      data-locations: classpath:data.sql
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
