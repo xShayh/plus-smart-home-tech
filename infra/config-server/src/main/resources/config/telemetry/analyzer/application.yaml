@@ -7,9 +7,12 @@ kafka:
     snapshots: telemetry.analyzer.snapshot
     hubs: telemetry.analyzer.hub
 
+server:
+  port: 0
+
 grpc:
   client:
-    data-generator:
+    hub-router:
       address: 'discovery:///data-generator'
       enableKeepAlive: true
       keepAliveWithoutCalls: true
@@ -18,12 +21,14 @@ grpc:
 spring:
   datasource:
     driverClassName: "org.postgresql.Driver"
-    url: "jdbc:postgresql://localhost:5433/analyzer"
+    url: "jdbc:postgresql://localhost:5433/smarthome"
     username: "postgres"
     password: "postgres"
   sql:
     init:
-      data-locations: data.sql
+      data-locations: classpath:data.sql
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 logging:
   level:
