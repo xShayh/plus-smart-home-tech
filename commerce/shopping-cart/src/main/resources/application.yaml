@@ -2,21 +2,18 @@ spring:
   application:
     name: shopping-cart
   config:
-    import: 'configserver:'
+    import: "configserver:"
   cloud:
     config:
-      discovery:
-        service-id: config-server
-        enabled: true
       fail-fast: true
       retry:
-        use-random-policy: true
+        useRandomPolicy: true
         max-interval: 6000
+      discovery:
+        enabled: true
+        serviceId: config-server
 
 eureka:
-  instance:
-    hostname: localhost
   client:
-    service-url:
+    serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-    register-with-eureka: true
