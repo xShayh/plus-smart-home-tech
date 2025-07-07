@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,6 +18,6 @@ public class Pageable {
     @Min(0)
     int page;
     @Min(1)
-    int size;
-    List<String> sort;
+    int size = 10;
+    List<String> sort = new ArrayList<>(List.of("productName"));
 }

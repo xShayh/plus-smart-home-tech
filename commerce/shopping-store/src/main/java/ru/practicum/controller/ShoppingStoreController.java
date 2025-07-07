@@ -19,8 +19,7 @@ public class ShoppingStoreController implements ShoppingStoreClient {
     @Override
     @GetMapping
     public List<ProductDto> getProducts(
-            @NotNull ProductCategory category,
-            @ModelAttribute Pageable pageable) {
+            @NotNull ProductCategory category, Pageable pageable) {
         return shoppingStoreService.getProducts(category, pageable);
     }
 
