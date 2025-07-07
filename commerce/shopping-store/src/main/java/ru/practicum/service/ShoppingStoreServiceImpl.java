@@ -12,6 +12,7 @@ import ru.practicum.model.Product;
 import ru.practicum.repository.ProductRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,7 +23,10 @@ public class ShoppingStoreServiceImpl implements ShoppingStoreService {
 
     @Override
     public List<ProductDto> getProducts(ProductCategory category, Pageable pageable) {
-        Sort sort = Sort.by(pageable.getSort().getFirst());
+        Sort sort = Optional.ofNullable(pageable.getSort())
+                .filter(s -> !s.isEmpty())
+                .map(s -> Sort.by(s.getFirst()))
+                .orElse(Sort.unsorted());
         PageRequest page = PageRequest.of(pageable.getPage(), pageable.getSize(), sort);
 
         return productRepository.findAllByProductCategory(category, page)
