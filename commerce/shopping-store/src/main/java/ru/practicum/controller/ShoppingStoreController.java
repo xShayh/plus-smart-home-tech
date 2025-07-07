@@ -2,12 +2,12 @@ package ru.practicum.controller;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.client.ShoppingStoreClient;
 import ru.practicum.dto.*;
 import ru.practicum.service.ShoppingStoreService;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -18,7 +18,7 @@ public class ShoppingStoreController implements ShoppingStoreClient {
 
     @Override
     @GetMapping
-    public List<ProductDto> getProducts(
+    public Page<ProductDto> getProducts(
             @NotNull ProductCategory category, Pageable pageable) {
         return shoppingStoreService.getProducts(category, pageable);
     }

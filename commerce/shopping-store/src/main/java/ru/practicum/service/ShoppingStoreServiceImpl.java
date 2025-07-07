@@ -1,6 +1,7 @@
 package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,6 @@ import ru.practicum.mapper.ProductMapper;
 import ru.practicum.model.Product;
 import ru.practicum.repository.ProductRepository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,7 +22,7 @@ public class ShoppingStoreServiceImpl implements ShoppingStoreService {
     private final ProductMapper productMapper;
 
     @Override
-    public List<ProductDto> getProducts(ProductCategory category, Pageable pageable) {
+    public Page<ProductDto> getProducts(ProductCategory category, Pageable pageable) {
         Sort sort = Optional.ofNullable(pageable.getSort())
                 .filter(s -> !s.isEmpty())
                 .map(s -> Sort.by(s.get(0)))
@@ -35,9 +35,7 @@ public class ShoppingStoreServiceImpl implements ShoppingStoreService {
         );
 
         return productRepository.findAllByProductCategory(category, pageRequest)
-                .stream()
-                .map(productMapper::map)
-                .toList();
+                .map(productMapper::map);
     }
 
     @Override
