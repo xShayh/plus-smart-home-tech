@@ -19,5 +19,4 @@ public class Pageable {
     @Min(1)
     int size;
     List<String> sort;
-
 }
