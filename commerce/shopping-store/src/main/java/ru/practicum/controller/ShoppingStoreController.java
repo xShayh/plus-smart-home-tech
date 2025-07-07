@@ -2,6 +2,7 @@ package ru.practicum.controller;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.client.ShoppingStoreClient;
 import ru.practicum.dto.*;
@@ -18,7 +19,10 @@ public class ShoppingStoreController implements ShoppingStoreClient {
 
     @Override
     @GetMapping
-    public List<ProductDto> getProducts(@NotNull ProductCategory category, Pageable pageable) {
+    public List<ProductDto> getProducts(
+            @NotNull ProductCategory category,
+            @PageableDefault(size = 1, page = 0) Pageable pageable
+    ) {
         return shoppingStoreService.getProducts(category, pageable);
     }
 
