@@ -22,8 +22,7 @@ public class ShoppingStoreServiceImpl implements ShoppingStoreService {
 
     @Override
     public List<ProductDto> getProducts(ProductCategory category, Pageable pageable) {
-        Sort sort = Sort.by(pageable.getSort().getFirst());
-        PageRequest page = PageRequest.of(pageable.getPage(), pageable.getSize(), sort);
+        PageRequest page = PageRequest.of(pageable.getPage(), pageable.getSize());
 
         return productRepository.findAllByProductCategory(category, page)
                 .stream()
