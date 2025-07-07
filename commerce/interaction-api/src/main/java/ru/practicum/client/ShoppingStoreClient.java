@@ -8,14 +8,14 @@ import ru.practicum.dto.Pageable;
 import ru.practicum.dto.ProductCategory;
 import ru.practicum.dto.ProductDto;
 import ru.practicum.dto.SetProductQuantityStateRequest;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.UUID;
 
 @FeignClient(name = "shopping-store")
 public interface ShoppingStoreClient {
     @GetMapping
-    List<ProductDto> getProducts(@RequestParam(name = "category") @NotNull ProductCategory category,
+    Page<ProductDto> getProducts(@RequestParam(name = "category") @NotNull ProductCategory category,
                                  Pageable pageable);
 
     @GetMapping("/{productId}")
