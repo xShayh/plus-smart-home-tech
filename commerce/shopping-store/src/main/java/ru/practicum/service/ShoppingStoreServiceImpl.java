@@ -23,6 +23,9 @@ public class ShoppingStoreServiceImpl implements ShoppingStoreService {
 
     @Override
     public List<ProductDto> getProducts(ProductCategory category, Pageable pageable) {
+        int pageNumber = Math.max(0, pageable.getPage());
+        int pageSize = Math.max(1, pageable.getSize());
+
         Sort sort = Optional.ofNullable(pageable.getSort())
                 .filter(s -> !s.isEmpty())
                 .map(s -> Sort.by(s.getFirst()))
