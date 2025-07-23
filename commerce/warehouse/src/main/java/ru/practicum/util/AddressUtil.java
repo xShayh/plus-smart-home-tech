@@ -1,4 +1,4 @@
-package ru.practicum.utils;
+package ru.practicum.util;
 
 import java.security.SecureRandom;
 import java.util.Random;
