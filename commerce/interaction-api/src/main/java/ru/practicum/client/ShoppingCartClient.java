@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.BookedProductsDto;
 import ru.practicum.dto.ChangeProductQuantityRequest;
 import ru.practicum.dto.ShoppingCartDto;
-import ru.practicum.utils.ValidationUtil;
+import ru.practicum.util.ValidationUtil;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@FeignClient(name = "shopping-cart")
+@FeignClient(name = "shopping-cart", path = "/api/v1/shopping-cart")
 public interface ShoppingCartClient {
 
     @GetMapping
