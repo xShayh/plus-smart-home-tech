@@ -69,18 +69,24 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public Double deliveryCost(OrderDto orderDto) {
-        Delivery delivery = getDeliveryByOrderId(orderDto.getOrderId());
-        log.info("delivery for calc cost: {}", delivery);
+        UUID orderId = orderDto.getOrderId();
+        log.info("orderId={} — Расчет стоимости доставки. Входящие данные: {}", orderId, orderDto);
+
+        Delivery delivery = getDeliveryByOrderId(orderId);
+        log.info("orderId={} — Доставка: {}", orderId, delivery);
+
         double cost = DeliveryUtil.BASE_DELIVERY_PRICE;
         cost += DeliveryUtil.BASE_DELIVERY_PRICE * getCoefByFromAddress(delivery.getFromAddress());
         cost *= getCoefByFragile(orderDto.isFragile());
         cost += orderDto.getDeliveryWeight() * 0.3;
         cost += orderDto.getDeliveryVolume() * 0.2;
         cost *= getCoefByToAddress(delivery.getFromAddress(), delivery.getToAddress());
+
+        log.info("orderId={} — Финальная стоимость доставки: {}", orderId, cost);
         return cost;
     }
 
-    double getCoefByFromAddress(Address address) {
+    private double getCoefByFromAddress(Address address) {
         String addressStr = address.toString();
         if (addressStr.contains("ADDRESS_1")) {
             return DeliveryUtil.ADDRESS_1_ADDRESS_COEF;
@@ -91,7 +97,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         }
     }
 
-    double getCoefByToAddress(Address from, Address to) {
+    private double getCoefByToAddress(Address from, Address to) {
         if (!from.getStreet().equals(to.getStreet())) {
             return DeliveryUtil.DIFF_STREET_ADDRESS_COEF;
         }
@@ -99,7 +105,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         return 1.0;
     }
 
-    double getCoefByFragile(boolean isFragile) {
+    private double getCoefByFragile(boolean isFragile) {
         if (isFragile) {
             return DeliveryUtil.FRAGILE_COEF;
         }
